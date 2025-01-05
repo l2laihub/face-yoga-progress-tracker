@@ -300,6 +300,10 @@ export interface Database {
           label: string;
           icon: string;
           description: string;
+          category: string | null;
+          difficulty: string | null;
+          estimated_duration: string | null;
+          points_reward: number;
           created_at: string;
           updated_at: string;
         };
@@ -308,6 +312,10 @@ export interface Database {
           label: string;
           icon: string;
           description: string;
+          category?: string | null;
+          difficulty?: string | null;
+          estimated_duration?: string | null;
+          points_reward?: number;
           created_at?: string;
           updated_at?: string;
         };
@@ -316,8 +324,105 @@ export interface Database {
           label?: string;
           icon?: string;
           description?: string;
+          category?: string | null;
+          difficulty?: string | null;
+          estimated_duration?: string | null;
+          points_reward?: number;
           created_at?: string;
           updated_at?: string;
+        };
+      };
+      user_goals: {
+        Row: {
+          id: string;
+          user_id: string;
+          goals: string[];
+          priority: number;
+          start_date: string;
+          target_date: string | null;
+          reminder_frequency: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          goals: string[];
+          priority?: number;
+          start_date?: string;
+          target_date?: string | null;
+          reminder_frequency?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          goals?: string[];
+          priority?: number;
+          start_date?: string;
+          target_date?: string | null;
+          reminder_frequency?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      goal_progress: {
+        Row: {
+          id: string;
+          user_id: string;
+          goal_id: string;
+          progress_value: number;
+          milestone_reached: number;
+          last_updated: string;
+          created_at: string;
+          notes: string | null;
+          status: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          goal_id: string;
+          progress_value?: number;
+          milestone_reached?: number;
+          last_updated?: string;
+          created_at?: string;
+          notes?: string | null;
+          status?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          goal_id?: string;
+          progress_value?: number;
+          milestone_reached?: number;
+          last_updated?: string;
+          created_at?: string;
+          notes?: string | null;
+          status?: string;
+        };
+      };
+      lesson_goal_mapping: {
+        Row: {
+          id: string;
+          lesson_id: string;
+          goal_id: string;
+          contribution_weight: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          lesson_id: string;
+          goal_id: string;
+          contribution_weight?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          lesson_id?: string;
+          goal_id?: string;
+          contribution_weight?: number;
+          created_at?: string;
         };
       };
     };

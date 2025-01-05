@@ -127,6 +127,63 @@ export interface Database {
         Insert: Omit<Database['public']['Tables']['lesson_history']['Row'], 'id' | 'created_at' | 'updated_at'>
         Update: Partial<Database['public']['Tables']['lesson_history']['Row']>
       }
+      goals: {
+        Row: {
+          id: string
+          label: string
+          icon: string
+          description: string
+          category: string | null
+          difficulty: 'beginner' | 'intermediate' | 'advanced' | null
+          estimated_duration: string | null
+          points_reward: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: Omit<Database['public']['Tables']['goals']['Row'], 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Database['public']['Tables']['goals']['Row']>
+      }
+      user_goals: {
+        Row: {
+          id: string
+          user_id: string
+          goals: string[]
+          priority: number
+          start_date: string
+          target_date: string | null
+          reminder_frequency: 'daily' | 'weekly' | 'monthly' | 'none'
+          created_at: string
+          updated_at: string
+        }
+        Insert: Omit<Database['public']['Tables']['user_goals']['Row'], 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Database['public']['Tables']['user_goals']['Row']>
+      }
+      goal_progress: {
+        Row: {
+          id: string
+          user_id: string
+          goal_id: string
+          progress_value: number
+          milestone_reached: number
+          last_updated: string
+          created_at: string
+          notes: string | null
+          status: 'not_started' | 'in_progress' | 'completed' | 'paused'
+        }
+        Insert: Omit<Database['public']['Tables']['goal_progress']['Row'], 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Database['public']['Tables']['goal_progress']['Row']>
+      }
+      lesson_goal_mapping: {
+        Row: {
+          id: string
+          lesson_id: string
+          goal_id: string
+          contribution_weight: number
+          created_at: string
+        }
+        Insert: Omit<Database['public']['Tables']['lesson_goal_mapping']['Row'], 'id' | 'created_at'>
+        Update: Partial<Database['public']['Tables']['lesson_goal_mapping']['Row']>
+      }
     }
     Views: {
       [_ in never]: never

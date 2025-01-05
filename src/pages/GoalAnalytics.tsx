@@ -82,7 +82,7 @@ export default function GoalAnalytics() {
         const lessonIds = lessonMappings?.map(m => m.lesson_id) || [];
 
         const { data: completions, error: completionError } = await supabase
-          .from('lesson_completion')
+          .from('lesson_history')
           .select('*')
           .eq('user_id', user.id)
           .in('lesson_id', lessonIds);
