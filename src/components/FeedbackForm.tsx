@@ -94,12 +94,14 @@ export const FeedbackForm = () => {
             color: 'text.secondary',
           },
         }}
-        MenuProps={{
-          PaperProps: {
-            sx: {
-              bgcolor: 'background.paper',
-              '& .MuiMenuItem-root': {
-                color: 'text.primary',
+        SelectProps={{
+          MenuProps: {
+            PaperProps: {
+              sx: {
+                bgcolor: 'background.paper',
+                '& .MuiMenuItem-root': {
+                  color: 'text.primary',
+                },
               },
             },
           },

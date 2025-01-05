@@ -236,6 +236,7 @@ function Navbar() {
               <Link
                 key={item.name}
                 to={item.href}
+                onClick={() => setIsMenuOpen(false)}
                 className={`flex items-center px-3 py-2 text-base font-medium ${
                   item.current
                     ? 'bg-indigo-50 border-l-4 border-indigo-500 text-indigo-700'

@@ -9,16 +9,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Chip,
   IconButton,
   MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
   TablePagination,
   TextField,
   InputAdornment,
-  SelectChangeEvent
 } from '@mui/material';
 import { Search, MessageCircle, AlertCircle, Lightbulb } from 'lucide-react';
 import { getFeedback, updateFeedbackStatus, type FeedbackStatus } from '../../api/feedback';
@@ -63,7 +58,18 @@ const FeedbackManager = () => {
     try {
       setLoading(true);
       const data = await getFeedback();
-      setFeedback(data);
+      // Transform the data to match the Feedback interface
+      const transformedData: Feedback[] = data.map((item: any) => ({
+        id: item.id,
+        title: item.title,
+        description: item.description,
+        type: item.type || 'general',
+        status: item.status || 'new',
+        email: item.email || '',
+        created_at: item.created_at,
+        updated_at: item.updated_at
+      }));
+      setFeedback(transformedData);
     } catch (error) {
       console.error('Error fetching feedback:', error);
       toast.error('Failed to load feedback');
@@ -154,29 +160,37 @@ const FeedbackManager = () => {
           }}
         />
 
-        <FormControl sx={{ minWidth: 120 }}>
-          <InputLabel sx={{ color: 'text.secondary' }}>Status</InputLabel>
-          <Select
-            value={statusFilter}
-            label="Status"
-            onChange={(e: SelectChangeEvent<FeedbackStatus | 'all'>) => setStatusFilter(e.target.value as FeedbackStatus | 'all')}
-            sx={{
+        <TextField
+          select
+          label="Status"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value as FeedbackStatus | 'all')}
+          sx={{
+            minWidth: 120,
+            '& .MuiOutlinedInput-root': {
               backgroundColor: 'background.default',
-              color: 'text.primary',
-              '& .MuiOutlinedInput-notchedOutline': {
+              '& fieldset': {
                 borderColor: 'divider',
               },
-              '&:hover .MuiOutlinedInput-notchedOutline': {
+              '&:hover fieldset': {
                 borderColor: 'primary.main',
               },
-              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              '&.Mui-focused fieldset': {
                 borderColor: 'primary.main',
               },
-              '& .MuiSvgIcon-root': {
-                color: 'text.secondary',
-              },
-            }}
-            MenuProps={{
+            },
+            '& .MuiInputLabel-root': {
+              color: 'text.secondary',
+            },
+            '& .MuiSelect-select': {
+              color: 'text.primary',
+            },
+            '& .MuiSvgIcon-root': {
+              color: 'text.secondary',
+            },
+          }}
+          SelectProps={{
+            MenuProps: {
               PaperProps: {
                 sx: {
                   bgcolor: 'background.paper',
@@ -185,39 +199,47 @@ const FeedbackManager = () => {
                   },
                 },
               },
-            }}
-          >
-            <MenuItem value="all">All Status</MenuItem>
-            <MenuItem value="new">New</MenuItem>
-            <MenuItem value="in_progress">In Progress</MenuItem>
-            <MenuItem value="resolved">Resolved</MenuItem>
-            <MenuItem value="closed">Closed</MenuItem>
-          </Select>
-        </FormControl>
+            },
+          }}
+        >
+          <MenuItem value="all">All Status</MenuItem>
+          <MenuItem value="new">New</MenuItem>
+          <MenuItem value="in_progress">In Progress</MenuItem>
+          <MenuItem value="resolved">Resolved</MenuItem>
+          <MenuItem value="closed">Closed</MenuItem>
+        </TextField>
 
-        <FormControl sx={{ minWidth: 120 }}>
-          <InputLabel sx={{ color: 'text.secondary' }}>Type</InputLabel>
-          <Select
-            value={typeFilter}
-            label="Type"
-            onChange={(e: SelectChangeEvent<FeedbackType | 'all'>) => setTypeFilter(e.target.value as FeedbackType | 'all')}
-            sx={{
+        <TextField
+          select
+          label="Type"
+          value={typeFilter}
+          onChange={(e) => setTypeFilter(e.target.value as FeedbackType | 'all')}
+          sx={{
+            minWidth: 120,
+            '& .MuiOutlinedInput-root': {
               backgroundColor: 'background.default',
-              color: 'text.primary',
-              '& .MuiOutlinedInput-notchedOutline': {
+              '& fieldset': {
                 borderColor: 'divider',
               },
-              '&:hover .MuiOutlinedInput-notchedOutline': {
+              '&:hover fieldset': {
                 borderColor: 'primary.main',
               },
-              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              '&.Mui-focused fieldset': {
                 borderColor: 'primary.main',
               },
-              '& .MuiSvgIcon-root': {
-                color: 'text.secondary',
-              },
-            }}
-            MenuProps={{
+            },
+            '& .MuiInputLabel-root': {
+              color: 'text.secondary',
+            },
+            '& .MuiSelect-select': {
+              color: 'text.primary',
+            },
+            '& .MuiSvgIcon-root': {
+              color: 'text.secondary',
+            },
+          }}
+          SelectProps={{
+            MenuProps: {
               PaperProps: {
                 sx: {
                   bgcolor: 'background.paper',
@@ -226,14 +248,14 @@ const FeedbackManager = () => {
                   },
                 },
               },
-            }}
-          >
-            <MenuItem value="all">All Types</MenuItem>
-            <MenuItem value="bug">Bug</MenuItem>
-            <MenuItem value="feature">Feature</MenuItem>
-            <MenuItem value="general">General</MenuItem>
-          </Select>
-        </FormControl>
+            },
+          }}
+        >
+          <MenuItem value="all">All Types</MenuItem>
+          <MenuItem value="bug">Bug</MenuItem>
+          <MenuItem value="feature">Feature</MenuItem>
+          <MenuItem value="general">General</MenuItem>
+        </TextField>
       </Box>
 
       <TableContainer component={Paper} sx={{ 
@@ -310,32 +332,38 @@ const FeedbackManager = () => {
                       </TableCell>
                       <TableCell sx={{ color: 'text.primary' }}>{item.title}</TableCell>
                       <TableCell sx={{ maxWidth: 300, color: 'text.primary' }}>
-                        <Typography noWrap>{item.description}</Typography>
+                        {item.description}
                       </TableCell>
                       <TableCell sx={{ color: 'text.primary' }}>{item.email}</TableCell>
                       <TableCell>
-                        <FormControl size="small">
-                          <Select
-                            value={item.status}
-                            onChange={(e) => handleStatusChange(item.id, e.target.value as FeedbackStatus)}
-                            sx={{
-                              minWidth: 120,
+                        <TextField
+                          select
+                          size="small"
+                          value={item.status}
+                          onChange={(e) => handleStatusChange(item.id, e.target.value as FeedbackStatus)}
+                          sx={{
+                            minWidth: 120,
+                            '& .MuiOutlinedInput-root': {
                               backgroundColor: 'background.default',
-                              color: 'text.primary',
-                              '& .MuiOutlinedInput-notchedOutline': {
+                              '& fieldset': {
                                 borderColor: 'divider',
                               },
-                              '&:hover .MuiOutlinedInput-notchedOutline': {
+                              '&:hover fieldset': {
                                 borderColor: 'primary.main',
                               },
-                              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                              '&.Mui-focused fieldset': {
                                 borderColor: 'primary.main',
                               },
-                              '& .MuiSvgIcon-root': {
-                                color: 'text.secondary',
-                              },
-                            }}
-                            MenuProps={{
+                            },
+                            '& .MuiSelect-select': {
+                              color: 'text.primary',
+                            },
+                            '& .MuiSvgIcon-root': {
+                              color: 'text.secondary',
+                            },
+                          }}
+                          SelectProps={{
+                            MenuProps: {
                               PaperProps: {
                                 sx: {
                                   bgcolor: 'background.paper',
@@ -344,14 +372,14 @@ const FeedbackManager = () => {
                                   },
                                 },
                               },
-                            }}
-                          >
-                            <MenuItem value="new">New</MenuItem>
-                            <MenuItem value="in_progress">In Progress</MenuItem>
-                            <MenuItem value="resolved">Resolved</MenuItem>
-                            <MenuItem value="closed">Closed</MenuItem>
-                          </Select>
-                        </FormControl>
+                            },
+                          }}
+                        >
+                          <MenuItem value="new">New</MenuItem>
+                          <MenuItem value="in_progress">In Progress</MenuItem>
+                          <MenuItem value="resolved">Resolved</MenuItem>
+                          <MenuItem value="closed">Closed</MenuItem>
+                        </TextField>
                       </TableCell>
                       <TableCell sx={{ color: 'text.primary' }}>
                         {new Date(item.created_at).toLocaleDateString()}
