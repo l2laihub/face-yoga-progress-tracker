@@ -197,7 +197,7 @@ function Navbar() {
                   </button>
                 </div>
                 {isProfileMenuOpen && (
-                  <div ref={profileMenuRef} className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5">
+                  <div ref={profileMenuRef} className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 z-50">
                     {profileMenuItems.map((item) => (
                       <Link
                         key={item.name}
