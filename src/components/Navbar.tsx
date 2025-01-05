@@ -32,11 +32,15 @@ function Navbar() {
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [avatarKey, setAvatarKey] = useState(Date.now());
   const profileMenuRef = React.useRef<HTMLDivElement>(null);
+  const mobileMenuRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (profileMenuRef.current && !profileMenuRef.current.contains(event.target as Node)) {
         setIsProfileMenuOpen(false);
+      }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
       }
     }
 
@@ -226,7 +230,7 @@ function Navbar() {
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden">
+        <div ref={mobileMenuRef} className="md:hidden">
           <div className="pt-2 pb-3 space-y-1">
             {menuItems.map((item) => (
               <Link
@@ -271,7 +275,7 @@ function Navbar() {
                 <Link
                   key={item.name}
                   to={item.href}
-                  onClick={() => setIsProfileMenuOpen(false)}
+                onClick={() => setIsMenuOpen(false)}
                   className="flex items-center px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-600"
                 >
                   <item.icon className="h-5 w-5 mr-2" />
@@ -280,7 +284,7 @@ function Navbar() {
               ))}
               <button
                 onClick={() => {
-                  setIsProfileMenuOpen(false);
+                  setIsMenuOpen(false);
                   handleSignOut();
                 }}
                 disabled={isSigningOut}
