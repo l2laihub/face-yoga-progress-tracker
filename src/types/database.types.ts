@@ -86,6 +86,7 @@ export interface Database {
           lessons_completed: number
           practice_time: number
           experience_level: 'beginner' | 'intermediate' | 'advanced' | null
+          onboarding_completed: boolean
           created_at: string
           updated_at: string
         }
@@ -183,6 +184,46 @@ export interface Database {
         }
         Insert: Omit<Database['public']['Tables']['lesson_goal_mapping']['Row'], 'id' | 'created_at'>
         Update: Partial<Database['public']['Tables']['lesson_goal_mapping']['Row']>
+      }
+      practice_schedules: {
+        Row: {
+          id: string
+          user_id: string
+          day_of_week: number
+          start_time: string
+          duration_minutes: number
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: Omit<Database['public']['Tables']['practice_schedules']['Row'], 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Database['public']['Tables']['practice_schedules']['Row']>
+      }
+      reminder_preferences: {
+        Row: {
+          user_id: string
+          reminder_enabled: boolean
+          reminder_before_minutes: number
+          notification_method: 'email' | 'push' | 'both'
+          quiet_hours_start: string | null
+          quiet_hours_end: string | null
+          last_updated: string
+        }
+        Insert: Omit<Database['public']['Tables']['reminder_preferences']['Row'], 'last_updated'>
+        Update: Partial<Database['public']['Tables']['reminder_preferences']['Row']>
+      }
+      reminder_history: {
+        Row: {
+          id: string
+          user_id: string
+          schedule_id: string | null
+          sent_at: string
+          type: 'scheduled' | 'missed_practice' | 'streak_at_risk'
+          delivery_status: 'sent' | 'failed' | 'clicked'
+          created_at: string
+        }
+        Insert: Omit<Database['public']['Tables']['reminder_history']['Row'], 'id' | 'created_at'>
+        Update: Partial<Database['public']['Tables']['reminder_history']['Row']>
       }
     }
     Views: {

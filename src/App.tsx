@@ -32,6 +32,7 @@ import Landing from './pages/Landing';
 import AdminDashboard from './pages/Admin/Dashboard';
 import LessonManager from './pages/Admin/LessonManager';
 import Feedback from './pages/Feedback';
+import SchedulingPage from './pages/SchedulingPage';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import { useTheme } from './components/ThemeProvider';
 import { lightTheme, darkTheme } from './theme/mui-theme';
@@ -84,6 +85,7 @@ function AppContent() {
                   <Route path="/goals" element={<AuthGuard><Goals /></AuthGuard>} />
                   <Route path="/goals/analytics" element={<AuthGuard><GoalAnalytics /></AuthGuard>} />
                   <Route path="/feedback" element={<AuthGuard><Feedback /></AuthGuard>} />
+                  <Route path="/schedule" element={<AuthGuard><SchedulingPage /></AuthGuard>} />
                 </>
               )}
             </>

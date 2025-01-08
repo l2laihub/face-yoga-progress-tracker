@@ -13,7 +13,8 @@ import {
   Layout,
   Book,
   MessageSquare,
-  Image
+  Image,
+  Calendar
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useSettingsStore } from '../store/settingsStore';
@@ -94,6 +95,12 @@ function Navbar() {
       href: '/feedback',
       icon: MessageSquare,
       current: location.pathname === '/feedback'
+    },
+    {
+      name: 'Schedule',
+      href: '/schedule',
+      icon: Calendar,
+      current: location.pathname === '/schedule'
     }
   ];
 

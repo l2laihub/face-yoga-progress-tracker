@@ -425,6 +425,96 @@ export interface Database {
           created_at?: string;
         };
       };
+      practice_schedules: {
+        Row: {
+          id: string;
+          user_id: string;
+          day_of_week: number;
+          start_time: string;
+          duration_minutes: number;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          day_of_week: number;
+          start_time: string;
+          duration_minutes: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          day_of_week?: number;
+          start_time?: string;
+          duration_minutes?: number;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      reminder_preferences: {
+        Row: {
+          user_id: string;
+          reminder_enabled: boolean;
+          reminder_before_minutes: number;
+          notification_method: 'email' | 'push' | 'both';
+          quiet_hours_start: string | null;
+          quiet_hours_end: string | null;
+          last_updated: string;
+        };
+        Insert: {
+          user_id: string;
+          reminder_enabled?: boolean;
+          reminder_before_minutes?: number;
+          notification_method?: 'email' | 'push' | 'both';
+          quiet_hours_start?: string | null;
+          quiet_hours_end?: string | null;
+          last_updated?: string;
+        };
+        Update: {
+          user_id?: string;
+          reminder_enabled?: boolean;
+          reminder_before_minutes?: number;
+          notification_method?: 'email' | 'push' | 'both';
+          quiet_hours_start?: string | null;
+          quiet_hours_end?: string | null;
+          last_updated?: string;
+        };
+      };
+      reminder_history: {
+        Row: {
+          id: string;
+          user_id: string;
+          schedule_id: string | null;
+          sent_at: string;
+          type: 'scheduled' | 'missed_practice' | 'streak_at_risk';
+          delivery_status: 'sent' | 'failed' | 'clicked';
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          schedule_id?: string | null;
+          sent_at?: string;
+          type: 'scheduled' | 'missed_practice' | 'streak_at_risk';
+          delivery_status: 'sent' | 'failed' | 'clicked';
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          schedule_id?: string | null;
+          sent_at?: string;
+          type?: 'scheduled' | 'missed_practice' | 'streak_at_risk';
+          delivery_status?: 'sent' | 'failed' | 'clicked';
+          created_at?: string;
+        };
+      };
     };
     Views: {
       [_ in never]: never

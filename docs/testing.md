@@ -1,198 +1,171 @@
-# Face Yoga App Testing Documentation
+# Testing Guide
 
-This document outlines the testing strategy and implementation for the Face Yoga Progress Tracker application.
-
-## Overview
-
-Our testing suite consists of unit tests and integration tests covering the core functionality of the application. We use Jest as our test runner and React Testing Library for testing React components.
-
-## Test Files Structure
-
-```
-src/
-├── api/
-│   └── __tests__/
-│       └── courseApi.test.ts       # API layer tests
-├── components/
-│   └── __tests__/
-│       ├── ExerciseCard.test.tsx   # Exercise card component tests
-│       └── ExerciseGrid.test.tsx   # Exercise grid component tests
-└── stores/
-    └── __tests__/
-        └── useExerciseStore.test.ts # Store tests
-```
-
-## Test Coverage
-
-### 1. Store Tests (`useExerciseStore.test.ts`)
-
-Tests the Zustand store that manages exercise state.
-
-#### Test Cases:
-- `fetchExercises`: Retrieves all exercises
-  - Verifies successful data fetching
-  - Checks loading state management
-  - Tests error handling
-- `searchExercises`: Filters exercises by title
-  - Validates search query formatting
-  - Tests result storage in state
-- `getExerciseById`: Retrieves single exercise
-  - Confirms correct ID usage
-  - Verifies single exercise retrieval
-
-#### Example:
-```typescript
-it('fetches exercises successfully', async () => {
-  const { result } = renderHook(() => useExerciseStore());
-  await act(async () => {
-    await result.current.fetchExercises();
-  });
-  expect(result.current.exercises).toEqual([mockExercise]);
-  expect(result.current.loading).toBe(false);
-});
-```
-
-### 2. API Tests (`courseApi.test.ts`)
-
-Tests the API layer for exercise access control.
-
-#### Test Cases:
-- Non-premium exercise access
-- Premium exercise access with subscription
-- Premium exercise access without subscription
-- Error handling in API calls
-
-#### Example:
-```typescript
-it('returns true for non-premium exercises', async () => {
-  const result = await courseApi.hasAccessToExercise(userId, exerciseId);
-  expect(result).toBe(true);
-});
-```
-
-### 3. Component Tests
-
-#### ExerciseGrid (`ExerciseGrid.test.tsx`)
-
-Tests the grid component that displays exercises.
-
-##### Test Cases:
-- Correct rendering of exercise cards
-- Exercise count display
-- Empty state handling
-- Exercise click interactions
-- Premium content display
-
-#### ExerciseCard (`ExerciseCard.test.tsx`)
-
-Tests individual exercise card components.
-
-##### Test Cases:
-- Exercise details display
-- Start button functionality
-- Premium/locked state
-- Benefits display
-- Difficulty badge display
-
-## Testing Strategy
-
-### 1. Unit Testing Approach
-- **Isolation**: Each component and function is tested in isolation
-- **Mocking**: External dependencies are mocked
-- **Edge Cases**: Coverage includes error states and boundary conditions
-
-### 2. Integration Testing
-- Store interactions with components
-- API calls through Supabase
-- User interactions with UI elements
-
-### 3. Mock Strategy
-
-#### Supabase Mocking
-```typescript
-jest.mock('../../lib/supabase', () => ({
-  supabase: {
-    from: jest.fn()
-  }
-}));
-```
-
-#### Test Data
-```typescript
-const mockExercise = {
-  id: '1',
-  title: 'Face Yoga Exercise',
-  duration: '5 minutes',
-  // ... other properties
-};
-```
-
-### 4. State Management Testing
-- Loading states
-- Error handling
-- Data updates
-- Premium/locked states
-
-### 5. User Interaction Testing
-- Click handlers
-- Visual feedback
-- Access control
-- Form interactions
-
-## Best Practices
-
-1. **Async Testing**
-   ```typescript
-   await act(async () => {
-     await result.current.fetchExercises();
-   });
-   ```
-
-2. **Error Handling**
-   ```typescript
-   it('handles errors gracefully', async () => {
-     // Mock error response
-     const result = await courseApi.hasAccessToExercise(userId, exerciseId);
-     expect(result).toBe(false);
-   });
-   ```
-
-3. **Component Testing**
-   ```typescript
-   render(<ExerciseGrid exercises={mockExercises} />);
-   expect(screen.getByText('Exercise Title')).toBeInTheDocument();
-   ```
+This project uses Vitest for testing. Here's how to run the tests:
 
 ## Running Tests
 
-```bash
-# Run all tests
-npm test
+1. Run all tests once:
+   ```bash
+   npm test
+   ```
 
-# Run specific test file
-npm test useExerciseStore.test.ts
+2. Run tests in watch mode (tests re-run when files change):
+   ```bash
+   npm run test:watch
+   ```
 
-# Run tests with coverage
-npm test -- --coverage
-```
+3. Run tests with coverage report:
+   ```bash
+   npm run test:coverage
+   ```
 
-## Continuous Integration
+4. Run tests with UI interface:
+   ```bash
+   npm run test:ui
+   ```
 
-Tests are run automatically on:
-- Pull requests
-- Merges to main branch
-- Release deployments
+## Test Files Location
 
-## Future Improvements
+Tests are organized in `__tests__` directories next to the components they test:
 
-1. **E2E Testing**
-   - Add Cypress for end-to-end testing
-   - Cover critical user flows
+- `src/components/scheduling/__tests__/`
+  - `ScheduleForm.test.tsx` - Tests for the schedule creation/editing form
+  - `ScheduleManager.test.tsx` - Tests for the schedule list and management
+  - `ReminderPreferences.test.tsx` - Tests for notification preferences
 
-2. **Performance Testing**
-   - Add performance benchmarks
-   - Test loading times
+- `supabase/functions/process-reminders/__tests__/`
+  - `email.test.ts` - Tests for email notification service
+  - `fcm.test.ts` - Tests for push notification service
+  - `integration.test.ts` - End-to-end tests for the notification system
 
-3. **Coverage Goals**
-   - Maintain >80% code coverage
-   - Add visual regression testing
+## What's Being Tested
+
+### Frontend Components
+1. ScheduleForm
+   - Form field validation
+   - Schedule creation
+   - Schedule updates
+   - Error handling
+   - Form submission
+
+2. ReminderPreferences
+   - Preference loading
+   - Toggle reminders
+   - Change notification method
+   - Set quiet hours
+   - Validation
+   - Error handling
+
+3. ScheduleManager
+   - Schedule list display
+   - Schedule grouping by day
+   - Schedule deletion
+   - Schedule activation/deactivation
+   - Loading states
+   - Error states
+
+### Backend Services
+1. Email Service
+   - Email sending
+   - Email template generation
+   - Error handling
+   - Configuration validation
+
+2. Push Notifications
+   - FCM integration
+   - Notification sending
+   - Token management
+   - Error handling
+
+3. Integration Tests
+   - Complete notification flow
+   - Schedule processing
+   - User preferences
+   - Error recovery
+
+## Debugging Tests
+
+1. Use the UI interface for better visualization:
+   ```bash
+   npm run test:ui
+   ```
+   This opens a web interface where you can:
+   - See test results in real-time
+   - Filter tests
+   - View test coverage
+   - Debug failing tests
+
+2. Use console.log in tests:
+   ```typescript
+   it('should do something', () => {
+     console.log('Current state:', result);
+     expect(result).toBe(expected);
+   });
+   ```
+
+3. Use screen.debug() for component testing:
+   ```typescript
+   import { screen } from '@testing-library/react';
+
+   it('renders correctly', () => {
+     render(<MyComponent />);
+     screen.debug(); // Prints the current DOM state
+   });
+   ```
+
+4. Use breakpoints:
+   - Add `debugger;` statement in your test
+   - Run tests in watch mode: `npm run test:watch`
+   - Open DevTools in your browser
+
+## Common Issues and Solutions
+
+1. Test fails with "Unable to find element":
+   - Check if the element exists in the rendered component
+   - Use screen.debug() to see the current DOM
+   - Verify your queries (getByText, getByRole, etc.)
+
+2. Mock function not called:
+   - Verify mock setup in beforeEach
+   - Check if the mock is properly imported
+   - Use mockImplementation for complex mocks
+
+3. Async test fails:
+   - Wrap assertions in waitFor
+   - Check if all promises are being awaited
+   - Verify async mock implementations
+
+## Adding New Tests
+
+When adding new features:
+1. Create test file in `__tests__` directory
+2. Import necessary testing utilities
+3. Mock dependencies
+4. Write test cases for:
+   - Happy path
+   - Error cases
+   - Edge cases
+   - User interactions
+
+Example structure:
+```typescript
+import { render, screen, fireEvent } from '@testing-library/react';
+import { MyComponent } from '../MyComponent';
+
+describe('MyComponent', () => {
+  beforeEach(() => {
+    // Setup
+  });
+
+  it('should handle normal case', () => {
+    // Test
+  });
+
+  it('should handle error case', () => {
+    // Test
+  });
+
+  it('should handle edge case', () => {
+    // Test
+  });
+});
